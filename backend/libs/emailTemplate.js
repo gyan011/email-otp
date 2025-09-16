@@ -67,6 +67,7 @@ export const Verification_Email_Template = `
               <p>Hello,</p>
               <p>Thank you for signing up! Please confirm your email address by entering the code below:</p>
               <span class="verification-code">{verificationCode}</span>
+              <p><strong>Note:</strong> This code will expire in 10 minutes.</p>
               <p>If you did not create an account, no further action is required. If you have any questions, feel free to contact our support team.</p>
           </div>
           <div class="footer">
@@ -241,6 +242,7 @@ export const Resend_Verification_Email_Template = `
               <p>Hello,</p>
               <p>We noticed you requested a new verification code. Please use the code below to complete your email verification:</p>
               <span class="verification-code">{verificationCode}</span>
+              <p><strong>Note:</strong> This code will expire in 10 minutes.</p>
               <p>If you did not request this, you can safely ignore this email.</p>
           </div>
           <div class="footer">

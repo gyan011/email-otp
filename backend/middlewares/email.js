@@ -23,8 +23,8 @@ export const welcomeEmail = async (email, name) => {
             from: '"Team Deferder_Warriors" <gyanranjan9661@gmail.com>',
             to: email,
             subject: "Welcome to Our Community!",
-            text: "Welcome", // plain‑text body
-            html: Welcome_Email_Template.replace("{name}", name), // HTML body
+            text: "Welcome", 
+            html: Welcome_Email_Template.replace("{name}", name), 
         });
         console.log('Email send successfully', response)
     } catch (error) {

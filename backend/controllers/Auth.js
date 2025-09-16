@@ -23,13 +23,14 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-
+        const expiryTime = new Date(Date.now() + 10 * 60 * 1000);
 
         const user = new UserModel({
             email,
             password: hashedPassword,
             name,
-            verificationCode
+            verificationCode,
+            verificationCodeExpires: expiryTime
         })
         await user.save();
         sendVerificationCode(user.email, verificationCode);
@@ -63,9 +64,18 @@ export const VerifyEmail = async (req, res) => {
             })
         }
 
-        user.isVerified = true,
-        user.verificationCode = undefined
+        if (user.verificationCodeExpires < Date.now()) {
+            return res.status(400).json({
+                success: false,
+                message: "Code expired! Please request a new one.",
+            });
+        }
+
+        user.isVerified = true;
+        user.verificationCode = undefined;
+        user.verificationCodeExpires = undefined;
         await user.save()
+        
         await welcomeEmail(user.email, user.name)
         return res.status(200).json({
             success:true,
@@ -109,7 +119,10 @@ export const resendCode = async (req, res) => {
 
         // generate new code
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiryTime = new Date(Date.now() + 10 * 60 * 1000);
+
         user.verificationCode = verificationCode;
+        user.verificationCodeExpires = expiryTime;
         await user.save();
 
         await resendVerificationCode(user.email, verificationCode);
